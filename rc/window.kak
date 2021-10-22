@@ -1,8 +1,27 @@
-# Window viewport
-# Public commands: ["link-window", "move-window", "swap-window"]
+# Window
+
+# Modes ────────────────────────────────────────────────────────────────────────
+
+try %[ declare-user-mode window ]
+
+define-command -override window-mode -docstring 'window mode' %{
+  enter-user-mode window
+}
 
 # Mappings ─────────────────────────────────────────────────────────────────────
 
+# Window mode
+map -docstring 'window mode' global normal <c-w> ': window-mode<ret>'
+
+# Window commands
+map -docstring 'new client' global window n ': terminal kak -c %val{session}<ret>'
+map -docstring 'horizontal split' global window h ': terminal-horizontal kak -c %val{session}<ret>'
+map -docstring 'vertical split' global window v ': terminal-vertical kak -c %val{session}<ret>'
+map -docstring 'new tab' global window t ': terminal-tab kak -c %val{session}<ret>'
+map -docstring 'new window' global window w ': terminal-window kak -c %val{session}<ret>'
+map -docstring 'close client' global window q ': quit<ret>'
+
+# Window viewport
 map -docstring 'grab buffer in viewport (0)' global goto 0 '<esc>:swap-window client0<ret>'
 map -docstring 'grab buffer in viewport (1)' global goto 1 '<esc>:swap-window client1<ret>'
 map -docstring 'grab buffer in viewport (2)' global goto 2 '<esc>:swap-window client2<ret>'
