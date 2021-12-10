@@ -36,19 +36,29 @@ map -docstring 'grab buffer in viewport (9)' global goto 9 '<esc>:swap-window cl
 # Commands ─────────────────────────────────────────────────────────────────────
 
 define-command -override link-window -params 1 -client-completion -docstring 'link-window <client>: link window to client' %{
-  execute-keys '"sZ'
-  execute-keys -client %arg{1} '"sz'
+  evaluate-commands -save-regs 's' %{
+    execute-keys '"sZ'
+    evaluate-commands -client %arg{1} %{
+        execute-keys '"sz'
+        echo
+    }
+  }
 }
 
 define-command -override move-window -params 1 -client-completion -docstring 'move-window <client>: move window to client' %{
-  execute-keys '"sZ'
-  execute-keys -client %arg{1} '"sz'
+  link-window %arg{1}
   buffer-next
 }
 
 define-command -override swap-window -params 1 -client-completion -docstring 'swap-window <client>: swap window with client' %{
-  execute-keys '"sZ'
-  execute-keys -client %arg{1} '"tZ'
-  execute-keys '"tz'
-  execute-keys -client %arg{1} '"sz'
+  evaluate-commands -save-regs 'st' %{
+    execute-keys '"sZ'
+    execute-keys -client %arg{1} '"tZ'
+    execute-keys '"tz'
+    echo
+    evaluate-commands -client %arg{1} %{
+      execute-keys '"sz'
+      echo
+    }
+  }
 }
